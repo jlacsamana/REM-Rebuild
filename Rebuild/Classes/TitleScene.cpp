@@ -1,5 +1,11 @@
 #include "TitleScene.h"
 
+#include "ui/UIButton.h"
+#include "ui/UIVBox.h"
+#include "ui/UIImageView.h"
+#include "ui/UILayoutParameter.h"
+#include "editor-support/cocostudio/CocosStudioExtension.h"
+
 USING_NS_CC;
 
 Scene* TitleScene::createScene()
@@ -17,76 +23,83 @@ static void problemLoading(const char* filename)
 // on "init" you need to initialize your instance
 bool TitleScene::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if ( !Scene::init() )
     {
         return false;
     }
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    auto origin = Director::getInstance()->getVisibleOrigin();
 
-    auto closeItem = MenuItemFont::create("Quit",
-                                           CC_CALLBACK_1(TitleScene::menuCloseCallback, this));
-    closeItem->setFontNameObj("fonts/Tox Typewriter.ttf");
-    float x = visibleSize.width/2;
-    float y = visibleSize.height/2;
-    closeItem->setPosition(Vec2(x,y));
+    _btnLayout = ui::VBox::create();
+    this->addChild(_btnLayout, 1);
 
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+    auto buttonLP = ui::LinearLayoutParameter::create();
+    auto buttonMargin = ui::Margin(0.f, 0.f, 0.f, 10.f);
+    buttonLP->setMargin(buttonMargin);
 
-    /////////////////////////////
-    // 3. add your codes below...
+    _startButton = ui::Button::create(START_BUTTON_FILE_NAME);
+    _startButton->addTouchEventListener(CC_CALLBACK_1(TitleScene::menuStartCallback, this));
+    _startButton->setLayoutParameter(buttonLP);
+    _btnLayout->addChild(_startButton);
 
-    // add a label shows "Hello World"
-    // create and initialize a label
+    _quitButton = ui::Button::create(QUIT_BUTTON_FILE_NAME);
+    _quitButton->addTouchEventListener(CC_CALLBACK_1(TitleScene::menuCloseCallback, this));
+    _btnLayout->addChild(_quitButton);
 
-    auto label = Label::createWithTTF("REM", "fonts/arial.ttf", 24);
-    if (label == nullptr)
-    {
-        problemLoading("'fonts/Marker Felt.ttf'");
-    }
-    else
-    {
-        // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - label->getContentSize().height));
+    float layoutWidth = std::max(_startButton->getContentSize().width, _quitButton->getContentSize().width);
+    float layoutHeight = _startButton->getContentSize().height + _quitButton->getContentSize().height + buttonMargin.bottom;
+    float yOffsetRatio = 0.3f;
 
-        // add the label as a child to this layer
-        this->addChild(label, 1);
-    }
+    _btnLayout->setPosition(Vec2(
+        visibleSize.width / 2 - layoutWidth / 2,
+        visibleSize.height * yOffsetRatio + layoutHeight / 2));
 
-    // add "TitleScene" splash screen"
-    auto sprite = Sprite::create("TitleScene.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'TitleScene.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    auto background = ui::ImageView::create("final/title.png");
+    background->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+    background->setScaleX(visibleSize.width / background->getContentSize().width);
+    background->setScaleY(visibleSize.height / background->getContentSize().height);
+    this->addChild(background, 0);
 
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }
+    auto mouseEventListener = EventListenerMouse::create();
+    mouseEventListener->onMouseMove = CC_CALLBACK_1(TitleScene::mouseMoveCallback, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseEventListener, this);
+    
     return true;
 }
 
+void TitleScene::mouseMoveCallback(EventMouse* event) {
+    Point mousePosition = Point(event->getCursorX() - _btnLayout->getPositionX(),
+        event->getCursorY()-_btnLayout->getPositionY());
+
+    std::string& startButtonFile = _startButton->getNormalFile().file;
+    bool hoveredStart = _startButton->getBoundingBox().containsPoint(mousePosition);
+    if (hoveredStart && startButtonFile != HOVER_START_BUTTON_FILE_NAME)
+    {
+        _startButton->loadTextureNormal(HOVER_START_BUTTON_FILE_NAME);
+    }
+    else if (!hoveredStart && startButtonFile != START_BUTTON_FILE_NAME)
+    {
+        _startButton->loadTextureNormal(START_BUTTON_FILE_NAME);
+    }
+
+    std::string& quitButtonFile = _quitButton->getNormalFile().file;
+    bool hoveredQuit = _quitButton->getBoundingBox().containsPoint(mousePosition);
+    if (hoveredQuit && quitButtonFile != HOVER_QUIT_BUTTON_FILE_NAME)
+    {
+        _quitButton->loadTextureNormal(HOVER_QUIT_BUTTON_FILE_NAME);
+    }
+    else if (!hoveredQuit && quitButtonFile != QUIT_BUTTON_FILE_NAME)
+    {
+        _quitButton->loadTextureNormal(QUIT_BUTTON_FILE_NAME);
+    }
+}
+
+void TitleScene::menuStartCallback(cocos2d::Ref* pSender)
+{
+    // go next scene!
+}
 
 void TitleScene::menuCloseCallback(Ref* pSender)
 {
-    //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
-
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
-
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-
-
 }
