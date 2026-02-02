@@ -219,3 +219,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Visual Studio Solution
+Rebuild/win32-build
+
+# bin
+Rebuild/bin

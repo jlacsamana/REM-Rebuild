@@ -1,0 +1,1 @@
+cocos compile -s Rebuild -p win32 -m release -o Rebuild/bin
