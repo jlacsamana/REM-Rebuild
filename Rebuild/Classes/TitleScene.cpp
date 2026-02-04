@@ -1,5 +1,5 @@
 #include "TitleScene.h"
-
+#include "GameScene.h"
 #include "ui/UIButton.h"
 #include "ui/UIVBox.h"
 #include "ui/UIImageView.h"
@@ -96,7 +96,8 @@ void TitleScene::mouseMoveCallback(EventMouse* event) {
 
 void TitleScene::menuStartCallback(cocos2d::Ref* pSender)
 {
-    // go next scene!
+    auto newGame = GameScene::createScene();
+    Director::getInstance()->replaceScene(newGame);
 }
 
 void TitleScene::menuCloseCallback(Ref* pSender)
