@@ -6,13 +6,9 @@
 
 
 #include "cocos2d.h"
-
+#include "data/GameState.h"
 
 USING_NS_CC;
-
-
-
-
 
 class GameScene : public cocos2d::Scene
 {
@@ -22,8 +18,17 @@ public:
 
     virtual bool init();
 
+    virtual void update(float dt);
+
     CREATE_FUNC(GameScene);
+
+   
+private:
+    GameState _gameState;
 };
+
+
+
 
 
 

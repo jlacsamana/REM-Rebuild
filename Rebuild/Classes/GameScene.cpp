@@ -1,6 +1,9 @@
 #include "GameScene.h"
-#include "editor-support/cocostudio/CocosStudioExtension.h"
 
+
+
+
+#include "editor-support/cocostudio/CocosStudioExtension.h"
 USING_NS_CC;
 
 
@@ -21,9 +24,15 @@ bool GameScene::init()
 
     }
 
+    // create game state with initial values
+    _gameState = GameState::GameState();
 
 
-
+    this->scheduleUpdate();
     return true;
+
+}
+
+void GameScene::update(float dt) {
 
 }
