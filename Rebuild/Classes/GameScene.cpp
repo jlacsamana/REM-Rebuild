@@ -10,6 +10,7 @@ USING_NS_CC;
 // Game event Callbacks
 static void TestGameEventCallback() {
     log("Sanity is at zero now");
+    Director::getInstance()->end();
 }
 
 // Callbacks
