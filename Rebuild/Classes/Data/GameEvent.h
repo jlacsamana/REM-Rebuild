@@ -13,6 +13,7 @@ public:
     // Much cleaner syntax
     GameEvent(std::function<void()> eventCallback, std::vector<EventCondition> conditions);
     void CheckForFireEvent(GameState* currentState);
+    bool IsExecuted() const;
 
 
 private:

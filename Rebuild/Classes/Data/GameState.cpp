@@ -1,5 +1,8 @@
 #include "GameState.h"
 #include <unordered_map>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
 // define initial game values here
 GameState::GameState() {
@@ -28,5 +31,10 @@ void GameState::ExecuteEventEvalLoop() {
 	}
 
 	// clean-up 
-
+	this->activeEvents.erase(
+		std::remove_if(this->activeEvents.begin(), this->activeEvents.end(), [](const GameEvent& obj) {
+			return obj.IsExecuted();
+			}),
+		this->activeEvents.end()
+	);
 }

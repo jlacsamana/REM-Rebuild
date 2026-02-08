@@ -50,3 +50,7 @@ void GameEvent::CheckForFireEvent(GameState* currentState) {
 		}
 	}
 }
+
+bool GameEvent::IsExecuted() const {
+	return this->executed;
+}
