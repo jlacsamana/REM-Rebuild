@@ -223,6 +223,9 @@ __marimo__/
 # Visual Studio Solution
 Rebuild/win32-build
 
+!Rebuild/win32-build/REM-Rebuild.slnx
+
 # bin
 Rebuild/bin
 .vs/
+
