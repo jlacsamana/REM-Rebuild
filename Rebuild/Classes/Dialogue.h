@@ -17,6 +17,16 @@ public:
 	static Dialogue* create(const std::string & textContent);
 
 	bool init(const std::string& textContent);
+
+	void dismiss(EventMouse* event);
+
+private:
+	const float MARGIN = 20.0f;
+	const float PADDING = 200.0f;
+	const float FONT_SIZE = 25;
+
+	const std::string BG_PATH = "UI/dialog_bubble_regular.png";
+	const std::string FONT_PATH = "fonts/Tox Typewriter.ttf";
 };
 
 #endif // __DIALOGUE_H__

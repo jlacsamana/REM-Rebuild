@@ -32,21 +32,27 @@ bool Dialogue::init(const std::string& textContent)
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
-    float margin = 20.0f;
-    float padding = 200.0f;
-    auto background = Sprite::create("UI/dialog_bubble_regular.png");
+    auto background = Sprite::create(BG_PATH);
     background->setAnchorPoint(Vec2(0.5, 0));
-    background->setPosition(Vec2(visibleSize.width/2, margin));
+    background->setPosition(Vec2(visibleSize.width/2, MARGIN));
 
-    auto label = Label::createWithTTF(textContent, "fonts/Tox Typewriter.ttf", 25.0f);
-    label->setWidth(background->getContentSize().width - 2 * padding);
+    auto mouseEventListener = EventListenerMouse::create();
+    mouseEventListener->onMouseDown = CC_CALLBACK_1(Dialogue::dismiss, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseEventListener, this);
+
+    auto label = Label::createWithTTF(textContent, FONT_PATH, FONT_SIZE);
+    label->setWidth(background->getContentSize().width - 2 * PADDING);
     label->enableWrap(true);
     label->setAnchorPoint(Vec2(0, 0.5));
-    label->setPosition(Vec2(padding, background->getContentSize().height/2));
+    label->setPosition(Vec2(PADDING, background->getContentSize().height/2));
     background->addChild(label, 1);
-
 
     addProtectedChild(background);
 
     return true;
+}
+
+void Dialogue::dismiss(EventMouse* event)
+{
+    removeFromParent();
 }
