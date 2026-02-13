@@ -8,13 +8,13 @@
 
 USING_NS_CC;
 
-Scene* TitleScene::createScene()
+Scene *TitleScene::createScene()
 {
     return TitleScene::create();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
-static void problemLoading(const char* filename)
+static void problemLoading(const char *filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in TitleSceneScene.cpp\n");
@@ -23,7 +23,7 @@ static void problemLoading(const char* filename)
 // on "init" you need to initialize your instance
 bool TitleScene::init()
 {
-    if ( !Scene::init() )
+    if (!Scene::init())
     {
         return false;
     }
@@ -63,15 +63,16 @@ bool TitleScene::init()
     auto mouseEventListener = EventListenerMouse::create();
     mouseEventListener->onMouseMove = CC_CALLBACK_1(TitleScene::mouseMoveCallback, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseEventListener, this);
-    
+
     return true;
 }
 
-void TitleScene::mouseMoveCallback(EventMouse* event) {
+void TitleScene::mouseMoveCallback(EventMouse *event)
+{
     Point mousePosition = Point(event->getCursorX() - _btnLayout->getPositionX(),
-        event->getCursorY()-_btnLayout->getPositionY());
+                                event->getCursorY() - _btnLayout->getPositionY());
 
-    std::string& startButtonFile = _startButton->getNormalFile().file;
+    std::string &startButtonFile = _startButton->getNormalFile().file;
     bool hoveredStart = _startButton->getBoundingBox().containsPoint(mousePosition);
     if (hoveredStart && startButtonFile != HOVER_START_BUTTON_FILE_NAME)
     {
@@ -82,7 +83,7 @@ void TitleScene::mouseMoveCallback(EventMouse* event) {
         _startButton->loadTextureNormal(START_BUTTON_FILE_NAME);
     }
 
-    std::string& quitButtonFile = _quitButton->getNormalFile().file;
+    std::string &quitButtonFile = _quitButton->getNormalFile().file;
     bool hoveredQuit = _quitButton->getBoundingBox().containsPoint(mousePosition);
     if (hoveredQuit && quitButtonFile != HOVER_QUIT_BUTTON_FILE_NAME)
     {
@@ -94,13 +95,13 @@ void TitleScene::mouseMoveCallback(EventMouse* event) {
     }
 }
 
-void TitleScene::menuStartCallback(cocos2d::Ref* pSender)
+void TitleScene::menuStartCallback(cocos2d::Ref *pSender)
 {
     auto newGame = GameScene::createScene();
     Director::getInstance()->replaceScene(newGame);
 }
 
-void TitleScene::menuCloseCallback(Ref* pSender)
+void TitleScene::menuCloseCallback(Ref *pSender)
 {
     Director::getInstance()->end();
 }
