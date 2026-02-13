@@ -61,13 +61,18 @@ list(APPEND GAME_SOURCE
      Classes/TitleScene.cpp
      Classes/Dialogue.cpp
      Classes/GameScene.cpp
+     Classes/Data/GameEvent.cpp
+     Classes/Data/GameState.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/HelloWorldScene.h
      Classes/TitleScene.h
-     Classes/GameScene.h
      Classes/Dialogue.h
+     Classes/GameScene.h
+     Classes/Data/EventCondition.h
+     Classes/Data/GameEvent.h
+     Classes/Data/GameState.h
      )
 
 if(ANDROID)
