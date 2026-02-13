@@ -8,13 +8,14 @@
 USING_NS_CC;
 
 // Game event Callbacks
-static void TestGameEventCallback() {
+static void TestGameEventCallback()
+{
     log("Sanity is at zero now");
     Director::getInstance()->end();
 }
 
 // Callbacks
-void GameScene::TestCallback(cocos2d::Ref* pSender)
+void GameScene::TestCallback(cocos2d::Ref *pSender)
 {
     double currentSanity = this->_gameState.GetProperty("sanity");
     this->_gameState.SetProperty("sanity", currentSanity - 10);
@@ -24,14 +25,11 @@ void GameScene::TestCallback(cocos2d::Ref* pSender)
     this->_gameState.ExecuteEventEvalLoop();
 }
 
-
 //
-Scene* GameScene::createScene()
+Scene *GameScene::createScene()
 {
     return GameScene::create();
 }
-
-
 
 bool GameScene::init()
 {
@@ -40,14 +38,12 @@ bool GameScene::init()
     {
 
         return false;
-
     }
 
     // create game state with initial values
     _gameState = GameState::GameState();
 
-    
-    auto testGameEvt = GameEvent(TestGameEventCallback, { EventCondition{"sanity", CondComparitor::LTEQ, 0} });
+    auto testGameEvt = GameEvent(TestGameEventCallback, {EventCondition{"sanity", CondComparitor::LTEQ, 0}});
     _gameState.RegisterEvent(testGameEvt);
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -57,7 +53,6 @@ bool GameScene::init()
     background->setScaleX(visibleSize.width / background->getContentSize().width);
     background->setScaleY(visibleSize.height / background->getContentSize().height);
     this->addChild(background, 0);
-
 
     _btnLayout = ui::VBox::create();
     this->addChild(_btnLayout, 1);
@@ -81,10 +76,8 @@ bool GameScene::init()
 
     this->scheduleUpdate();
     return true;
-
 }
 
-void GameScene::update(float dt) {
-
+void GameScene::update(float dt)
+{
 }
-
