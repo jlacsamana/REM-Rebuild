@@ -1,6 +1,6 @@
 #include "TitleScene.h"
 #include "GameScene.h"
-#include "ui/UIButton.h"
+#include "Components/HoverableButton.h"
 #include "ui/UIVBox.h"
 #include "ui/UIImageView.h"
 #include "ui/UILayoutParameter.h"
@@ -37,13 +37,18 @@ bool TitleScene::init()
     auto buttonMargin = ui::Margin(0.f, 0.f, 0.f, 10.f);
     buttonLP->setMargin(buttonMargin);
 
-    _startButton = ui::Button::create(START_BUTTON_FILE_NAME);
-    _startButton->addTouchEventListener(CC_CALLBACK_1(TitleScene::menuStartCallback, this));
+    _startButton = HoverableButton::create(
+        START_BUTTON_FILE_NAME,
+        HOVER_START_BUTTON_FILE_NAME,
+        CC_CALLBACK_1(TitleScene::menuStartCallback, this));
     _startButton->setLayoutParameter(buttonLP);
     _btnLayout->addChild(_startButton);
 
-    _quitButton = ui::Button::create(QUIT_BUTTON_FILE_NAME);
-    _quitButton->addTouchEventListener(CC_CALLBACK_1(TitleScene::menuCloseCallback, this));
+    _quitButton = HoverableButton::create(
+        QUIT_BUTTON_FILE_NAME,
+        HOVER_QUIT_BUTTON_FILE_NAME,
+        CC_CALLBACK_1(TitleScene::menuCloseCallback, this));
+    _quitButton->setLayoutParameter(buttonLP);
     _btnLayout->addChild(_quitButton);
 
     float layoutWidth = std::max(_startButton->getContentSize().width, _quitButton->getContentSize().width);
@@ -60,39 +65,7 @@ bool TitleScene::init()
     background->setScaleY(visibleSize.height / background->getContentSize().height);
     this->addChild(background, 0);
 
-    auto mouseEventListener = EventListenerMouse::create();
-    mouseEventListener->onMouseMove = CC_CALLBACK_1(TitleScene::mouseMoveCallback, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseEventListener, this);
-
     return true;
-}
-
-void TitleScene::mouseMoveCallback(EventMouse *event)
-{
-    Point mousePosition = Point(event->getCursorX() - _btnLayout->getPositionX(),
-                                event->getCursorY() - _btnLayout->getPositionY());
-
-    std::string &startButtonFile = _startButton->getNormalFile().file;
-    bool hoveredStart = _startButton->getBoundingBox().containsPoint(mousePosition);
-    if (hoveredStart && startButtonFile != HOVER_START_BUTTON_FILE_NAME)
-    {
-        _startButton->loadTextureNormal(HOVER_START_BUTTON_FILE_NAME);
-    }
-    else if (!hoveredStart && startButtonFile != START_BUTTON_FILE_NAME)
-    {
-        _startButton->loadTextureNormal(START_BUTTON_FILE_NAME);
-    }
-
-    std::string &quitButtonFile = _quitButton->getNormalFile().file;
-    bool hoveredQuit = _quitButton->getBoundingBox().containsPoint(mousePosition);
-    if (hoveredQuit && quitButtonFile != HOVER_QUIT_BUTTON_FILE_NAME)
-    {
-        _quitButton->loadTextureNormal(HOVER_QUIT_BUTTON_FILE_NAME);
-    }
-    else if (!hoveredQuit && quitButtonFile != QUIT_BUTTON_FILE_NAME)
-    {
-        _quitButton->loadTextureNormal(QUIT_BUTTON_FILE_NAME);
-    }
 }
 
 void TitleScene::menuStartCallback(cocos2d::Ref *pSender)
