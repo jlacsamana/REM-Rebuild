@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-#include "ui/UIButton.h"
+#include "Components/HoverableButton.h"
 #include "ui/UIVBox.h"
 
 USING_NS_CC;
@@ -24,8 +24,8 @@ public:
     CREATE_FUNC(TitleScene);
 
 private:
-    ui::Button* _startButton;
-    ui::Button* _quitButton;
+    HoverableButton* _startButton;
+    HoverableButton* _quitButton;
     ui::VBox* _btnLayout;
 
     const char* START_BUTTON_FILE_NAME = "UI/default/startGame.png";
