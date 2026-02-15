@@ -3,7 +3,6 @@
 
 HoverableButton::HoverableButton()
 {
-    _button = nullptr;
 }
 
 HoverableButton::~HoverableButton()
@@ -38,12 +37,8 @@ bool HoverableButton::init(
     _idleImgPath = idleImgPath;
     _hoverImgPath = hoverImgPath;
 
-    _button = ui::Button::create(idleImgPath);
-    _button->setAnchorPoint(Vec2(0.0f, 0.0f));
-    _button->addTouchEventListener(callback);
-
-    setContentSize(_button->getContentSize());
-    addProtectedChild(_button);
+    loadTextureNormal(idleImgPath);
+    addTouchEventListener(callback);
 
     auto mouseEventListener = EventListenerMouse::create();
     mouseEventListener->onMouseMove = CC_CALLBACK_1(HoverableButton::mouseMoveCallback, this);
@@ -55,17 +50,16 @@ bool HoverableButton::init(
 void HoverableButton::mouseMoveCallback(EventMouse* event)
 {
     Point mousePosition = Point(event->getCursorX(), event->getCursorY());
-    Rect globalBox = RectApplyAffineTransform(
-        _button->getBoundingBox(), _button->getNodeToWorldAffineTransform());
-    bool isHovered = globalBox.containsPoint(mousePosition);
+    auto camera = Camera::getVisitingCamera();
+    bool isHovered = hitTest(mousePosition, camera, nullptr);
 
-    std::string& curImgPath = _button->getNormalFile().file;
+    std::string& curImgPath = getNormalFile().file;
     if (isHovered && curImgPath != _hoverImgPath)
     {
-        _button->loadTextureNormal(_hoverImgPath);
+        loadTextureNormal(_hoverImgPath);
     }
     else if (!isHovered && curImgPath != _idleImgPath)
     {
-        _button->loadTextureNormal(_idleImgPath);
+        loadTextureNormal(_idleImgPath);
     }
 }

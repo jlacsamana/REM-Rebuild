@@ -8,7 +8,7 @@
 
 USING_NS_CC;
 
-class HoverableButton : public ui::Widget
+class HoverableButton : public ui::Button
 {
 public:
 	HoverableButton();
@@ -27,8 +27,6 @@ public:
 	void mouseMoveCallback(EventMouse* event);
 
 private:
-	ui::Button* _button;
-
 	std::string _idleImgPath;
 	std::string _hoverImgPath;
 };
