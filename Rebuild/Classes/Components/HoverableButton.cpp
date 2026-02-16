@@ -12,7 +12,7 @@ HoverableButton::~HoverableButton()
 HoverableButton *HoverableButton::create(
     const std::string &idleImgPath,
     const std::string &hoverImgPath,
-    const ccWidgetTouchCallback &callback)
+    const ccWidgetClickCallback &callback)
 {
     HoverableButton *dlg = new (std::nothrow) HoverableButton;
     if (dlg && dlg->init(idleImgPath, hoverImgPath, callback))
@@ -27,7 +27,7 @@ HoverableButton *HoverableButton::create(
 bool HoverableButton::init(
     const std::string &idleImgPath,
     const std::string &hoverImgPath,
-    const ccWidgetTouchCallback& callback)
+    const ccWidgetClickCallback &callback)
 {
     if (!Widget::init())
     {
@@ -38,7 +38,7 @@ bool HoverableButton::init(
     _hoverImgPath = hoverImgPath;
 
     loadTextureNormal(idleImgPath);
-    addTouchEventListener(callback);
+    addClickEventListener(callback);
 
     auto mouseEventListener = EventListenerMouse::create();
     mouseEventListener->onMouseMove = CC_CALLBACK_1(HoverableButton::mouseMoveCallback, this);

@@ -17,12 +17,12 @@ public:
 	static HoverableButton *create(
 		const std::string &idleImgPath,
 		const std::string &hoverImgPath,
-		const ccWidgetTouchCallback &callback);
+		const ccWidgetClickCallback &callback);
 
 	bool init(
 		const std::string &idleImgPath,
 		const std::string &hoverImgPath,
-		const ccWidgetTouchCallback &callback);
+		const ccWidgetClickCallback &callback);
 
 	void mouseMoveCallback(EventMouse* event);
 
