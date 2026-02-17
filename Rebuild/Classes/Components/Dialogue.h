@@ -18,9 +18,12 @@ public:
 
 	bool init(const std::string& textContent);
 
-	void dismiss(EventMouse* event);
+	bool isActive();
+	void deactivate(EventMouse* event);
 
 private:
+	bool _isActive;
+
 	const float MARGIN = 20.0f;
 	const float PADDING = 200.0f;
 	const float FONT_SIZE = 25;

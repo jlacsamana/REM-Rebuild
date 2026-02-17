@@ -26,6 +26,8 @@ public:
 
 	void mouseMoveCallback(EventMouse* event);
 
+	void setEnabled(bool enabled);
+
 private:
 	std::string _idleImgPath;
 	std::string _hoverImgPath;
