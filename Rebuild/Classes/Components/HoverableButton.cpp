@@ -51,7 +51,7 @@ void HoverableButton::mouseMoveCallback(EventMouse* event)
 {
     Point mousePosition = Point(event->getCursorX(), event->getCursorY());
     auto camera = Camera::getVisitingCamera();
-    bool isHovered = hitTest(mousePosition, camera, nullptr);
+    bool isHovered = hitTest(mousePosition, camera, nullptr) && _enabled;
 
     std::string& curImgPath = getNormalFile().file;
     if (isHovered && curImgPath != _hoverImgPath)
@@ -62,4 +62,9 @@ void HoverableButton::mouseMoveCallback(EventMouse* event)
     {
         loadTextureNormal(_idleImgPath);
     }
+}
+
+void HoverableButton::setEnabled(bool enabled)
+{
+    _enabled = enabled;
 }

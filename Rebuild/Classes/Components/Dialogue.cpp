@@ -3,7 +3,8 @@
 #include "ui/UIText.h"
 #include "ui/UILayout.h"
 
-Dialogue::Dialogue()
+Dialogue::Dialogue():
+    _isActive(true)
 {
 }
 
@@ -37,7 +38,7 @@ bool Dialogue::init(const std::string& textContent)
     background->setPosition(Vec2(visibleSize.width/2, MARGIN));
 
     auto mouseEventListener = EventListenerMouse::create();
-    mouseEventListener->onMouseDown = CC_CALLBACK_1(Dialogue::dismiss, this);
+    mouseEventListener->onMouseDown = CC_CALLBACK_1(Dialogue::deactivate, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseEventListener, this);
 
     auto label = Label::createWithTTF(textContent, FONT_PATH, FONT_SIZE);
@@ -52,7 +53,12 @@ bool Dialogue::init(const std::string& textContent)
     return true;
 }
 
-void Dialogue::dismiss(EventMouse* event)
+bool Dialogue::isActive()
 {
-    removeFromParent();
+    return _isActive;
+}
+
+void Dialogue::deactivate(EventMouse* event)
+{
+    _isActive = false;
 }
