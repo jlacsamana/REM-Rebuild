@@ -4,10 +4,9 @@
 #define __GAMEWORLD_SCENE_H__
 
 #include "cocos2d.h"
-#include "Models/GameState.h"
-
-#include "Components/HoverableButton.h"
 #include "Components/Dialogue.h"
+#include "Components/HoverableButton.h"
+#include "Models/GameState.h"
 #include "ui/UIButton.h"
 #include "ui/UIVBox.h"
 
@@ -25,6 +24,8 @@ public:
     virtual bool init();
 
     virtual void update(float dt);
+
+    void createDialogue(const std::string text);
 
     void laptopClickCallback(Ref* pSender);
     void bookClickCallback(Ref* pSender);

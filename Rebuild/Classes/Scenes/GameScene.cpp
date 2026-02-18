@@ -1,12 +1,14 @@
-#include "GameScene.h"
 #include "Components/Dialogue.h"
 #include "Components/HoverableButton.h"
+#include "GameScene.h"
+#include "Models/GameEvent.h"
 #include "ui/UIButton.h"
-#include "ui/UIVBox.h"
 #include "ui/UIImageView.h"
 #include "ui/UILayoutParameter.h"
+#include "ui/UIVBox.h"
 
 #include "editor-support/cocostudio/CocosStudioExtension.h"
+
 USING_NS_CC;
 
 // Game event Callbacks
@@ -14,6 +16,11 @@ static void TestGameEventCallback()
 {
     log("Sanity is at zero now");
     Director::getInstance()->end();
+}
+
+static void CreateDialogueCallback(GameScene* scene, std::string text)
+{
+    scene->createDialogue(text);
 }
 
 GameScene::GameScene() :
@@ -28,7 +35,6 @@ GameScene::~GameScene()
 {
 }
 
-
 void GameScene::laptopClickCallback(Ref* pSender)
 {
     log("laptop clicked");
@@ -42,10 +48,6 @@ void GameScene::bookClickCallback(Ref* pSender)
 void GameScene::canClickCallback(Ref* pSender)
 {
     log("can clicked");
-
-    _activeDialogue = Dialogue::create("yummy drink yum");
-    this->addChild(_activeDialogue, 1);
-    setButtonsEnabled(false);
 
     double currentSanity = this->_gameState.GetProperty("sanity");
     this->_gameState.SetProperty("sanity", currentSanity - 10);
@@ -79,8 +81,29 @@ bool GameScene::init()
     // create game state with initial values
     _gameState = GameState::GameState();
 
-    auto testGameEvt = GameEvent(TestGameEventCallback, {EventCondition{"sanity", CondComparitor::LTEQ, 0}});
+    auto testGameEvt = std::unique_ptr<BaseGameEvent>(new GameEvent<>(
+        TestGameEventCallback,
+        {EventCondition{"sanity", CondComparitor::LTEQ, 0}}));
     _gameState.RegisterEvent(testGameEvt);
+
+    _gameState.RegisterEvent(
+        std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
+            CreateDialogueCallback,
+            { EventCondition{"sanity", CondComparitor::LTEQ, 75} },
+            this, 
+            "75 sanity")));
+    _gameState.RegisterEvent(
+        std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
+            CreateDialogueCallback,
+            { EventCondition{"sanity", CondComparitor::LTEQ, 50} },
+            this,
+            "50 sanity")));
+    _gameState.RegisterEvent(
+        std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
+            CreateDialogueCallback,
+            { EventCondition{"sanity", CondComparitor::LTEQ, 25} },
+            this,
+            "25 sanity")));
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     auto screenCenter = Vec2(visibleSize.width / 2, visibleSize.height / 2);
@@ -113,6 +136,13 @@ bool GameScene::init()
     return true;
 }
 
+void GameScene::createDialogue(const std::string text)
+{
+    _activeDialogue = Dialogue::create(text);
+    this->addChild(_activeDialogue, 1);
+    setButtonsEnabled(false);
+}
+
 void GameScene::update(float dt)
 {
     // Remove dialogue after it has been dismissed
@@ -123,3 +153,4 @@ void GameScene::update(float dt)
         setButtonsEnabled(true);
     }
 }
+

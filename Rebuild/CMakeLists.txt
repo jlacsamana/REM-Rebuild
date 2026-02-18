@@ -67,7 +67,6 @@ list(APPEND GAME_SOURCE
      Classes/Scenes/GameScene.cpp
      Classes/Components/Dialogue.cpp
      Classes/Components/HoverableButton.cpp
-     Classes/Models/GameEvent.cpp
      Classes/Models/GameState.cpp
      )
 list(APPEND GAME_HEADER
@@ -79,6 +78,7 @@ list(APPEND GAME_HEADER
      Classes/Components/HoverableButton.h
      Classes/Models/EventCondition.h
      Classes/Models/GameEvent.h
+     Classes/Models/BaseGameEvent.h
      Classes/Models/GameState.h
      )
 
