@@ -1,24 +1,20 @@
 #ifndef GAMESTATE_H  // Header Guards
 #define GAMESTATE_H
-#include <unordered_map>
+#include "BaseGameEvent.h"
+#include <memory>
 #include <string>
-#include "GameEvent.h"
-
+#include <unordered_map>
 
 class GameState {
 public:
 	GameState();
 	float GetProperty(std::string key);
 	void SetProperty(std::string key, float newVal);
-	void RegisterGameEvents(std::vector<GameEvent> events);
-	void RegisterEvent(GameEvent event);
+	void RegisterEvent(std::unique_ptr<BaseGameEvent>& event);
 	void ExecuteEventEvalLoop();
 
 private:
-	std::unordered_map<std::string, float> properties;
-	std::vector<GameEvent> activeEvents;
-
-
-
+	std::unordered_map<std::string, float> _properties;
+	std::vector<std::unique_ptr<BaseGameEvent>> _activeEvents;
 };
 #endif
