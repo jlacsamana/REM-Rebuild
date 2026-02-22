@@ -49,12 +49,25 @@ void GameScene::canClickCallback(Ref* pSender)
 {
     log("can clicked");
 
-    double currentSanity = this->_gameState.GetProperty("sanity");
-    this->_gameState.SetProperty("sanity", currentSanity - 10);
-    log("new sanity %f", this->_gameState.GetProperty("sanity"));
+    double canInteractions = _gameState.getProperty(GameState::KEY_CAN_INTERACTIONS);
+
+    if (canInteractions < 3)
+    {
+        _gameState.incrementProperty(GameState::KEY_SANITY, -10);
+    }
+    else
+    {
+        _gameState.registerEvent(
+            std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
+                CreateDialogueCallback,
+                { EventCondition{"can_interactions", CondComparitor::GTEQ, 4} },
+                this,
+                "None left...")));
+    }
+    _gameState.incrementProperty(GameState::KEY_CAN_INTERACTIONS, 1);
 
     // run game event checker here
-    this->_gameState.ExecuteEventEvalLoop();
+    _gameState.executeEventEvalLoop();
 }
 
 void GameScene::setButtonsEnabled(bool enabled)
@@ -62,6 +75,30 @@ void GameScene::setButtonsEnabled(bool enabled)
     _laptopButton->setEnabled(enabled);
     _bookButton->setEnabled(enabled);
     _canButton->setEnabled(enabled);
+}
+
+void GameScene::initGameEvents()
+{
+    _gameState.registerEvent(
+        std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
+            CreateDialogueCallback,
+            { EventCondition{"can_interactions", CondComparitor::EQ, 1} },
+            this,
+            "I feel a bit more awake")));
+
+    _gameState.registerEvent(
+        std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
+            CreateDialogueCallback,
+            { EventCondition{"can_interactions", CondComparitor::EQ, 2} },
+            this,
+            "This is helping... just a little. But I'm a bit shaky.")));
+
+    _gameState.registerEvent(
+        std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
+            CreateDialogueCallback,
+            { EventCondition{"can_interactions", CondComparitor::EQ, 3} },
+            this,
+            "That was my last sip.")));
 }
 
 //
@@ -79,31 +116,13 @@ bool GameScene::init()
     }
 
     // create game state with initial values
-    _gameState = GameState::GameState();
+    _gameState = GameState();
+    initGameEvents();
 
     auto testGameEvt = std::unique_ptr<BaseGameEvent>(new GameEvent<>(
         TestGameEventCallback,
         {EventCondition{"sanity", CondComparitor::LTEQ, 0}}));
-    _gameState.RegisterEvent(testGameEvt);
-
-    _gameState.RegisterEvent(
-        std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
-            CreateDialogueCallback,
-            { EventCondition{"sanity", CondComparitor::LTEQ, 75} },
-            this, 
-            "75 sanity")));
-    _gameState.RegisterEvent(
-        std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
-            CreateDialogueCallback,
-            { EventCondition{"sanity", CondComparitor::LTEQ, 50} },
-            this,
-            "50 sanity")));
-    _gameState.RegisterEvent(
-        std::unique_ptr<BaseGameEvent>(new GameEvent<GameScene*, std::string>(
-            CreateDialogueCallback,
-            { EventCondition{"sanity", CondComparitor::LTEQ, 25} },
-            this,
-            "25 sanity")));
+    _gameState.registerEvent(testGameEvt);
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     auto screenCenter = Vec2(visibleSize.width / 2, visibleSize.height / 2);

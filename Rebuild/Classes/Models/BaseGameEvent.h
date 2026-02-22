@@ -7,7 +7,7 @@ class BaseGameEvent {
 public:
     virtual ~BaseGameEvent() = default;
 
-    virtual void CheckForFireEvent(GameState* currentState) = 0;
-    virtual bool IsExecuted() const = 0;
+    virtual void checkForFireEvent(GameState* currentState) = 0;
+    virtual bool isExecuted() const = 0;
 };
 #endif
