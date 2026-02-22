@@ -65,6 +65,7 @@ list(APPEND GAME_SOURCE
      Classes/Scenes/HelloWorldScene.cpp
      Classes/Scenes/TitleScene.cpp
      Classes/Scenes/GameScene.cpp
+     Classes/Scenes/LaptopScene.cpp
      Classes/Components/Dialogue.cpp
      Classes/Components/HoverableButton.cpp
      Classes/Models/GameState.cpp
@@ -74,6 +75,7 @@ list(APPEND GAME_HEADER
      Classes/Scenes/HelloWorldScene.h
      Classes/Scenes/TitleScene.h
      Classes/Scenes/GameScene.h
+     Classes/Scenes/LaptopScene.h
      Classes/Components/Dialogue.h
      Classes/Components/HoverableButton.h
      Classes/Models/EventCondition.h

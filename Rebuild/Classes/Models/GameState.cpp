@@ -9,6 +9,7 @@
 GameState::GameState() {
 	_properties[KEY_SANITY] = 100.0;
 	_properties[KEY_CAN_INTERACTIONS] = 0;
+	_properties[KEY_LAPTOP_INTERACTIONS] = 0;
 }
 
 float GameState::getProperty(std::string key) {
