@@ -7,30 +7,36 @@
 
 // define initial game values here
 GameState::GameState() {
-	_properties["sanity"] = 100.0;
+	_properties[KEY_SANITY] = 100.0;
+	_properties[KEY_CAN_INTERACTIONS] = 0;
 }
 
-float GameState::GetProperty(std::string key) {
+float GameState::getProperty(std::string key) {
 	return _properties[key];
 }
 
-void GameState::SetProperty(std::string key, float newVal) {
+void GameState::setProperty(std::string key, float newVal) {
 	_properties[key] = newVal;
 }
 
-void GameState::RegisterEvent(std::unique_ptr<BaseGameEvent>& event) {
+void GameState::incrementProperty(std::string key, float delta)
+{
+	_properties[key] += delta;
+}
+
+void GameState::registerEvent(std::unique_ptr<BaseGameEvent>& event) {
 	_activeEvents.push_back(std::move(event));
 }
 
-void GameState::ExecuteEventEvalLoop() {
+void GameState::executeEventEvalLoop() {
 	for (auto &event : _activeEvents) {
-		event->CheckForFireEvent(this);
+		event->checkForFireEvent(this);
 	}
 
 	// clean-up 
 	_activeEvents.erase(
 		std::remove_if(_activeEvents.begin(), _activeEvents.end(), [](auto& event) {
-			return event->IsExecuted();
+			return event->isExecuted();
 			}),
 		_activeEvents.end()
 	);

@@ -22,7 +22,6 @@ public:
     static cocos2d::Scene *createScene();
 
     virtual bool init();
-
     virtual void update(float dt);
 
     void createDialogue(const std::string text);
@@ -36,6 +35,8 @@ public:
     CREATE_FUNC(GameScene);
 
 private:
+    void initGameEvents();
+
     GameState _gameState;
 
     Dialogue* _activeDialogue;
