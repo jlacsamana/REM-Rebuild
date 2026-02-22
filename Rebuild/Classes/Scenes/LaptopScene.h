@@ -24,9 +24,9 @@ private:
     int _primaryInteractNum;
     int _secondaryInteractNum;
 
-    const int SUB_INTERACTIONS[4] = {2, 0, 1, 1};
+    const int SUB_INTERACT_MAX[4] = {3, 1, 2, 2};
     const int LAST_PRIMARY_INTERACT_NUM = 3;
-    const std::string BACKGROUND_PATH = "final/zoomed_laptop_states/interaction_";
+    const std::string BACKGROUND_PATH_PREFIX = "final/zoomed_laptop_states/interaction_";
 
     void updateImage();
 };

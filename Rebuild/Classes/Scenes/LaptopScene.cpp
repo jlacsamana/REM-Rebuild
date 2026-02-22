@@ -67,10 +67,10 @@ void LaptopScene::backToGameScene()
 
 void LaptopScene::subInteraction(Ref* pSender)
 {
+    _secondaryInteractNum++;
     log("secondayInteraction %d", _secondaryInteractNum);
-    if (_secondaryInteractNum < SUB_INTERACTIONS[_primaryInteractNum])
+    if (_secondaryInteractNum < SUB_INTERACT_MAX[_primaryInteractNum])
     {
-        _secondaryInteractNum++;
         updateImage();
     }
     // Game ends on last laptop interaction
