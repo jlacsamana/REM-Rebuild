@@ -842,7 +842,7 @@ void Director::pushScene(Scene *scene)
     _nextScene = scene;
 }
 
-void Director::popScene()
+Scene* Director::popScene()
 {
     CCASSERT(_runningScene != nullptr, "running scene should not null");
     
@@ -865,6 +865,7 @@ void Director::popScene()
         _sendCleanupToScene = true;
         _nextScene = _scenesStack.at(c - 1);
     }
+    return _nextScene;
 }
 
 void Director::popToRootScene()

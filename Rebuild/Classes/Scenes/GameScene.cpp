@@ -1,6 +1,7 @@
 #include "Components/Dialogue.h"
 #include "Components/HoverableButton.h"
 #include "GameScene.h"
+#include "LaptopScene.h"
 #include "Models/GameEvent.h"
 #include "ui/UIButton.h"
 #include "ui/UIImageView.h"
@@ -37,7 +38,16 @@ GameScene::~GameScene()
 
 void GameScene::laptopClickCallback(Ref* pSender)
 {
-    log("laptop clicked");
+    double laptopInteractions = _gameState.getProperty(GameState::KEY_LAPTOP_INTERACTIONS);
+    log("laptop clicked %f", laptopInteractions);
+
+    if (laptopInteractions < 4)
+    {
+        _gameState.incrementProperty(GameState::KEY_LAPTOP_INTERACTIONS, 1);
+        auto laptopScene = LaptopScene::createScene(laptopInteractions);
+        auto transScene = TransitionFade::create(0.5, laptopScene, Color3B(0, 0, 0));
+        Director::getInstance()->pushScene(transScene);
+    }
 }
 
 void GameScene::bookClickCallback(Ref* pSender)
@@ -47,9 +57,8 @@ void GameScene::bookClickCallback(Ref* pSender)
 
 void GameScene::canClickCallback(Ref* pSender)
 {
-    log("can clicked");
-
     double canInteractions = _gameState.getProperty(GameState::KEY_CAN_INTERACTIONS);
+    log("can clicked %f", canInteractions);
 
     if (canInteractions < 3)
     {

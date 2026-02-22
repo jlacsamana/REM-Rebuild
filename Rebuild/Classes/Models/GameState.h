@@ -17,6 +17,7 @@ public:
 
 	inline static const std::string KEY_SANITY = "sanity";
 	inline static const std::string KEY_CAN_INTERACTIONS = "can_interactions";
+	inline static const std::string KEY_LAPTOP_INTERACTIONS = "laptop_interactions";
 
 private:
 	std::unordered_map<std::string, float> _properties;
